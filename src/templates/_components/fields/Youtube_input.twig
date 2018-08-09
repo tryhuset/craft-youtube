@@ -1,0 +1,170 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Youtube plugin for Craft CMS 3.x
+ *
+ * Youtube Field Input
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   CraftYoutube
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.text({
+    id: name~'-prev',
+    name: name~'[prev]',
+    value: prev|default(''),
+    type: 'hidden',
+    class: 'hidden'
+}) }}
+
+<style media="screen">
+    #{{namespacedId}}-input {
+        position: relative;
+    }
+    #{{namespacedId}}-clear {
+        position: absolute;
+        top: 50%;
+        right: 5px;
+        -webkit-transform: translateY(-50%);
+        transform: translateY(-50%);
+        color: #da5a47;
+        background: none;
+        border: none;
+    }
+</style>
+<div id="{{name}}-input">
+    {{ forms.text({
+        id: name~'-url',
+        name: name~'[url]',
+        value: value.url|default(''),
+        class: 'text'
+    }) }}
+    {% if value is not empty %}
+        <button id="{{ name }}-clear" type="button">{{ 'clear'|t }}</button>
+    {% endif %}
+</div>
+
+
+{% if value is not empty %}
+<div id="youtube-content">
+    {% if value.hasErrors('url') %}
+        <ul class="errors">
+            {% for error in value.errors('url') %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+
+    {% if value.code|default(false) %}
+        {{ forms.text({
+            id: name~'-code',
+            name: name~'[code]',
+            value: value.code,
+            type: 'hidden',
+            class: 'hidden'
+        }) }}
+        {{ forms.text({
+            id: name~'-duration',
+            name: name~'[duration]',
+            value: value.duration,
+            type: 'hidden',
+            class: 'hidden'
+        }) }}
+        {{ forms.text({
+            id: name~'-thumbnails',
+            name: name~'[thumbnails]',
+            value: value.thumbnails|json_encode,
+            type: 'hidden',
+            class: 'hidden'
+        }) }}
+        <div style="margin-top: 10px;max-width: 480px;">
+            <div style="position: relative;padding-bottom: 56.25%;">
+                <iframe
+                    width="480"
+                    height="270"
+                    src="//www.youtube.com/embed/{{ value.code }}?feature=oembed"
+                    frameborder="0"
+                    allowfullscreen
+                    style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;">
+                </iframe>
+            </div>
+            <div class="field">
+                <div class="heading">
+                    <label id="fields-youtube-title-label" for="fields-youtube-title">{{ 'Title'|t }}</label>
+                </div>
+                <div class="input ltr {% if value.hasErrors('title') %}errors{% endif %}">
+                    {{ forms.text({
+                        id: name~'-title',
+                        name: name~'[title]',
+                        value: value.title|default(''),
+                        class: 'text'
+                    }) }}
+                </div>
+                {% if value.hasErrors('title') %}
+                    <ul class="errors">
+                        {% for error in value.errors('title') %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+            <div class="field">
+                <div class="heading">
+                    <label id="fields-youtube-description-label" for="fields-youtube-description">{{ 'Description'|t }}</label>
+                </div>
+                <div class="input ltr {% if value.hasErrors('description') %}errors{% endif %}">
+                    {{ forms.textarea({
+                        id: name~'-description',
+                        name: name~'[description]',
+                        value: value.description|default(''),
+                        rows: 10,
+                    }) }}
+                </div>
+                {% if value.hasErrors('description') %}
+                    <ul class="errors">
+                        {% for error in value.errors('description') %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% if value.duration %}
+            <div class="field">
+                <div class="heading">
+                    <label>{{ 'Duration'|t }}</label>
+                </div>
+                <div class="input ltr {% if value.hasErrors('duration') %}errors{% endif %}">
+                    {{ value.duration|youtube_duration }}
+                </div>
+                {% if value.hasErrors('duration') %}
+                    <ul class="errors">
+                        {% for error in value.errors('duration') %}
+                            <li>{{ error }}</li>
+                        {% endfor %}
+                    </ul>
+                {% endif %}
+            </div>
+        {% endif %}
+        </div>
+    {% endif %}
+</div>
+<script>
+    (function() {
+        var clear = document.getElementById('{{ namespacedId }}-clear');
+        var input = document.getElementById('{{ namespacedId }}-url');
+        var content = document.getElementById('{{ namespacedId }}-content');
+
+        clear.addEventListener('click', function() {
+            input.value = '';
+            content.parentNode.removeChild(content);
+            clear.parentNode.removeChild(clear);
+        });
+    })();
+</script>
+{% endif %}

@@ -1,0 +1,27 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Craft Youtube plugin for Craft CMS 3.x
+ *
+ * Craft Youtube Settings.twig
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   CraftYoutube
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{% do view.registerAssetBundle("apt\\craftyoutube\\assetbundles\\craftyoutube\\CraftYoutubeAsset") %}
+
+{{ forms.textField({
+    label: 'Google Api Key'|t('craft-youtube'),
+    id: 'googleApiKey',
+    name: 'googleApiKey',
+    value: settings['googleApiKey']})
+}}
+
+<a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="nofollow noreferrer">{{ 'Get api key by following this documentation.'|t('craft-youtube') }}</a>

@@ -1,0 +1,199 @@
+<?php
+/**
+ * Craft Youtube plugin for Craft CMS 3.x
+ *
+ * Add youtube field
+ *
+ * @link      https://apt.no/
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ */
+
+namespace apt\craftyoutube\services;
+
+use apt\craftyoutube\CraftYoutube;
+use apt\craftyoutube\models\Film;
+use GuzzleHttp\Client;
+
+use Craft;
+use craft\base\Component;
+
+/**
+ * @author    Thomas Sømoen
+ * @package   CraftYoutube
+ * @since     1.0.0
+ */
+class Youtube extends Component
+{
+    // Public Methods
+    // =========================================================================
+
+    public function get($post)
+    {
+        $prev = $post['prev'];
+        unset($post['prev']);
+
+        if (array_key_exists('title', $post) && empty($post['title'])) {
+            unset($post['title']);
+        }
+
+        if (array_key_exists('description', $post) && empty($post['description'])) {
+            unset($post['description']);
+        }
+
+        if (array_key_exists('thumbnails', $post) && !empty($post['thumbnails'])) {
+            $post['thumbnails'] = json_decode($post['thumbnails'], true);
+        }
+
+        if (!array_key_exists('url', $post)) {
+            $youtube = new Film();
+            $youtube->validate();
+            return $youtube;
+        }
+
+        if (!empty($prev) && $prev == $post['url']) {
+            $youtube = new Film($post);
+            $youtube->validate();
+            if (!$youtube->hasErrors()) {
+                return $youtube;
+            }
+        }
+
+        $code = $this->parseUrl($post['url']);
+
+        $youtube = new Film($post);
+
+        if (strlen($code) !== 11) {
+            $youtube->addError('url', Craft::t('craft-youtube', 'Invalid Youtube url.'));
+            return $youtube;
+        }
+
+        $youtube->code = $code;
+        $apiKey = CraftYoutube::getInstance()->settings->googleApiKey;
+        try {
+            $client = new Client([
+                'base_uri' => 'https://www.googleapis.com',
+            ]);
+            $response = $client->get("/youtube/v3/videos?key={$apiKey}&id={$code}&part=snippet,contentDetails");
+
+            $status = $response->getStatusCode();
+            if ($status !== 200) {
+                throw new \Exception("An error occurred fetching the youtube movie", 1);
+            }
+
+            $response = json_decode($response->getBody(), true);
+
+            if ($response['pageInfo']['totalResults'] === 0) {
+                $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', [ 'code' => $code ]));
+                $youtube->code = null;
+            } else {
+                if (array_key_exists('items', $response)) {
+                    $items = array_shift($response['items']);
+                    if ($items && count($items) > 0) {
+                        $data = [];
+                        if (array_key_exists('snippet', $items)) {
+                            /* Prevent uppercase titles */
+                            $title = strip_tags($items['snippet']['title']);
+                            $data['title'] = preg_replace_callback('/([.!?])\s*(\w)/', function ($matches) {
+                                return strtoupper($matches[1] . ' ' . $matches[2]);
+                            }, ucfirst(mb_strtolower($items['snippet']['title'])));
+
+                            if (array_key_exists('description', $items['snippet'])) {
+                                $data['description'] = strip_tags($items['snippet']['description']);
+                            }
+                            if (array_key_exists('thumbnails', $items['snippet'])) {
+                                $data['thumbnails'] = $items['snippet']['thumbnails'];
+                            }
+                        }
+                        if (array_key_exists('contentDetails', $items)) {
+                            $data['duration'] = $items['contentDetails']['duration'];
+                        }
+                        $data = array_merge($data, $post);
+                        $youtube->setAttributes($data);
+                        $youtube->validate();
+                    } else {
+                        $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', [ 'code' => $code ]));
+                    }
+                }
+            }
+        } catch (\Exception $e) {
+            $youtube->addError('url', Craft::t('craft-youtube', 'An error occurred fetching the youtube movie'));
+        }
+
+        return $youtube;
+    }
+
+    public static function parseUrl($param='')
+    {
+        $param = trim($param);
+        if (empty($param)) {
+            return;
+        }
+
+        // ren videokode
+        if(strlen($param) == 11) {
+            return self::cleanIt($param);
+        }
+
+        // 'vanlig' youtube-url
+        if (filter_var($param, FILTER_VALIDATE_URL)) {
+            parse_str( parse_url( $param, PHP_URL_QUERY ), $vars );
+            if(isset($vars['v']) && strlen($vars['v']) == 11) {
+                return self::cleanIt($vars['v']);
+            }
+        }
+
+        $param = str_replace(['http://','https://', 'www.', '//'], '', $param);
+
+        // type: youtu.be/mr9PjLNsUgU
+        if (strpos($param, 'youtu.be/')===0) {
+            $parts = explode("/", $param);
+            return self::cleanIt(end($parts));
+        }
+
+        // type: youtu.be/mr9PjLNsUgU
+        if (strpos($param, '.be/')===0) {
+            $parts = explode("/", $param);
+            return self::cleanIt(end($parts));
+        }
+
+        // type: youtube.com/watch?v=mr9PjLNsUgU&feature=youtu.be
+        if (strpos($param, 'youtube.com/')===0) {
+            parse_str( parse_url( $param, PHP_URL_QUERY ), $vars );
+            if(isset($vars['v']) && strlen($vars['v']) == 11) {
+                return self::cleanIt($vars['v']);
+            }
+        }
+
+        return null;
+    }
+
+    private static function cleanIt($value=null)
+    {
+        return str_replace(["."], '', trim($value));
+    }
+
+    /*
+     * @return STRING
+     */
+     public function formatDuration($ISO8601)
+     {
+         try {
+             $interval = new \DateInterval($ISO8601);
+             $duration = str_pad($interval->i, 2, '0', STR_PAD_LEFT).':'.str_pad($interval->s, 2, '0', STR_PAD_LEFT);
+             if ($interval->h > 0) {
+                 $duration = str_pad($interval->h, 2, '0', STR_PAD_LEFT).':'.$duration;
+             }
+             if ($interval->d > 0) {
+                 $duration = str_pad($interval->d, 2, '0', STR_PAD_LEFT).':'.$duration;
+             }
+             if ($interval->m > 0) {
+                 $duration = str_pad($interval->m, 2, '0', STR_PAD_LEFT).':'.$duration;
+             }
+             if ($interval->y > 0) {
+                 $duration = str_pad($interval->y, 2, '0', STR_PAD_LEFT).':'.$duration;
+             }
+             return $duration;
+         } catch (\Exception $e) {}
+         return $ISO8601;
+     }
+}

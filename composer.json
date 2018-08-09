@@ -1,0 +1,43 @@
+{
+    "name": "apt/craft-youtube",
+    "description": "Add youtube field",
+    "type": "craft-plugin",
+    "version": "1.0.0",
+    "keywords": [
+        "craft",
+        "cms",
+        "craftcms",
+        "craft-plugin",
+        "craft youtube"
+    ],
+    "support": {
+        "docs": "???",
+        "issues": "???"
+    },
+    "license": "MIT",
+    "authors": [
+        {
+            "name": "Thomas Sømoen",
+            "homepage": "https://apt.no/"
+        }
+    ],
+    "require": {
+        "craftcms/cms": "^3.0.0-RC1"
+    },
+    "autoload": {
+        "psr-4": {
+          "apt\\craftyoutube\\": "src/"
+        }
+    },
+    "extra": {
+        "name": "Craft Youtube",
+        "handle": "craft-youtube",
+        "hasCpSettings": true,
+        "hasCpSection": false,
+        "changelogUrl": "???",
+        "components": {
+            "youtube": "apt\\craftyoutube\\services\\Youtube"
+        },
+        "class": "apt\\craftyoutube\\CraftYoutube"
+    }
+}
