@@ -63,11 +63,10 @@ class Film extends Model
         return $this->title;
     }
 
-    public function validateYoutubeUrl($attribute)
+    public function validateArray($attribute)
     {
-        $code = CraftYoutube::getInstance()->youtube->parseUrl($this->$attribute);
-        if (!$code) {
-            $this->addError($attribute, Craft::t('craft-youtube', 'Invalid Youtube url.'));
+        if (!is_array($this->$attribute)) {
+            $this->addError($attribute, Craft::t('craft-youtube', '{attribute} must be an array', ['attribute' => Craft::t('craft-youtube', $attribute)]));
         }
     }
 
@@ -79,7 +78,8 @@ class Film extends Model
         return [
             [['title', 'url', 'title', 'duration'], 'string'],
             [['title', 'code', 'description'], 'required'],
-            ['code', 'string', 'min' => 11, 'max' => 11]
+            ['code', 'string', 'min' => 11, 'max' => 11],
+            ['thumbnails', 'validateArray'],
         ];
     }
 }

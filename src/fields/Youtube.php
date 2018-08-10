@@ -60,7 +60,7 @@ class Youtube extends Field
      */
     public function getContentColumnType(): string
     {
-        return Schema::TYPE_JSON;
+        return Schema::TYPE_TEXT;
     }
 
     /**
@@ -112,7 +112,7 @@ class Youtube extends Field
         $model->validate();
         foreach ($errors as $attribute => $error) {
             foreach ($error as $message) {
-                $model->addError($attribute, $message);
+                $model->addError($attribute, Craft::t('craft-youtube', $message));
             }
         }
 
@@ -126,8 +126,6 @@ class Youtube extends Field
      */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
-        // Register our asset bundle
-        // Craft::$app->getView()->registerAssetBundle(YoutubeFieldAsset::class);
 
         // Get our id and namespace
         $id = Craft::$app->getView()->formatInputId($this->handle);

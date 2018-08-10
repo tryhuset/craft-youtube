@@ -19,4 +19,7 @@ return [
     'Invalid Youtube url.' => 'Ugyldig Youtube url',
     'Url cannot be blank.' => 'Du må fylle inn url',
     'Description cannot be blank.' => 'Du må fylle inn beskrivelse',
+    'An error occurred fetching the youtube movie' => 'Det oppstod en feil da vi skulle hente videoen hos Youtube',
+    'Youtube movie "{code}" doesn\'t exist' => 'Youtube film med kode {code} finnes ikke',
+    '{attribute} must be an array' => '{attribute} må være en liste',
 ];

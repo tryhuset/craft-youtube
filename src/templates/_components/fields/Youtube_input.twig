@@ -60,6 +60,27 @@
             {% endfor %}
         </ul>
     {% endif %}
+    {% if value.hasErrors('code') %}
+        <ul class="errors">
+            {% for error in value.errors('code') %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if value.hasErrors('duration') %}
+        <ul class="errors">
+            {% for error in value.errors('duration') %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
+    {% if value.hasErrors('thumbnails') %}
+        <ul class="errors">
+            {% for error in value.errors('thumbnails') %}
+                <li>{{ error }}</li>
+            {% endfor %}
+        </ul>
+    {% endif %}
 
     {% if value.code|default(false) %}
         {{ forms.text({

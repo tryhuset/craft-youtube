@@ -16,6 +16,7 @@ use GuzzleHttp\Client;
 
 use Craft;
 use craft\base\Component;
+use LitEmoji\LitEmoji;
 
 /**
  * @author    Thomas Sømoen
@@ -24,10 +25,28 @@ use craft\base\Component;
  */
 class Youtube extends Component
 {
-    // Public Methods
-    // =========================================================================
+    protected function cleanTitle($title) : string
+    {
+        $title = LitEmoji::encodeShortcode($title);
+        $title = strip_tags($title);
 
-    public function get($post)
+        /* Prevent uppercase titles */
+        $title = preg_replace_callback('/([.!?])\s*(\w)/', function ($matches) {
+            return strtoupper($matches[1] . ' ' . $matches[2]);
+        }, ucfirst(mb_strtolower($title)));
+
+        return $title;
+    }
+
+    protected function cleanDescription($description) : string
+    {
+        $description = strip_tags($description);
+        $description = LitEmoji::encodeShortcode($description);
+
+        return $description;
+    }
+
+    public function get($post) : Film
     {
         $prev = $post['prev'];
         unset($post['prev']);
@@ -81,6 +100,9 @@ class Youtube extends Component
             }
 
             $response = json_decode($response->getBody(), true);
+            unset($post['code']);
+            unset($post['thumbnails']);
+            unset($post['duration']);
 
             if ($response['pageInfo']['totalResults'] === 0) {
                 $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', [ 'code' => $code ]));
@@ -91,14 +113,10 @@ class Youtube extends Component
                     if ($items && count($items) > 0) {
                         $data = [];
                         if (array_key_exists('snippet', $items)) {
-                            /* Prevent uppercase titles */
-                            $title = strip_tags($items['snippet']['title']);
-                            $data['title'] = preg_replace_callback('/([.!?])\s*(\w)/', function ($matches) {
-                                return strtoupper($matches[1] . ' ' . $matches[2]);
-                            }, ucfirst(mb_strtolower($items['snippet']['title'])));
+                            $data['title'] = $this->cleanTitle($items['snippet']['title']);
 
                             if (array_key_exists('description', $items['snippet'])) {
-                                $data['description'] = strip_tags($items['snippet']['description']);
+                                $data['description'] = $this->cleanDescription($items['snippet']['description']);
                             }
                             if (array_key_exists('thumbnails', $items['snippet'])) {
                                 $data['thumbnails'] = $items['snippet']['thumbnails'];
@@ -107,6 +125,15 @@ class Youtube extends Component
                         if (array_key_exists('contentDetails', $items)) {
                             $data['duration'] = $items['contentDetails']['duration'];
                         }
+
+                        if (array_key_exists('title', $post)) {
+                            $post['title'] = $this->cleanTitle($post['title']);
+                        }
+
+                        if (array_key_exists('description', $post)) {
+                            $post['description'] = $this->cleanDescription($post['description']);
+                        }
+
                         $data = array_merge($data, $post);
                         $youtube->setAttributes($data);
                         $youtube->validate();

@@ -11,7 +11,7 @@
 namespace apt\craftyoutube\twigextensions;
 
 use apt\craftyoutube\CraftYoutube;
-
+use LitEmoji\LitEmoji;
 use Craft;
 
 /**
@@ -39,6 +39,9 @@ class CraftYoutubeTwigExtension extends \Twig_Extension
     {
         return [
             new \Twig_SimpleFilter('youtube_duration', [$this, 'formatDuration']),
+            new \Twig_SimpleFilter('emoji_shortcode', [$this, 'emojiShortcode']),
+            new \Twig_SimpleFilter('emoji_html', [$this, 'emojiHTML']),
+            new \Twig_SimpleFilter('emoji_unicode', [$this, 'emojiUnicode']),
         ];
     }
 
@@ -50,5 +53,35 @@ class CraftYoutubeTwigExtension extends \Twig_Extension
     public function formatDuration($duration)
     {
         return CraftYoutube::getInstance()->youtube->formatDuration($duration);
+    }
+
+    /**
+     * @param null $text
+     *
+     * @return string
+     */
+    public function emojiShortcode($text)
+    {
+        return LitEmoji::encodeShortcode($text);
+    }
+
+    /**
+     * @param null $text
+     *
+     * @return string
+     */
+    public function emojiHTML($text)
+    {
+        return LitEmoji::encodeHtml($text);
+    }
+
+    /**
+     * @param null $text
+     *
+     * @return string
+     */
+    public function emojiUnicode($text)
+    {
+        return LitEmoji::encodeUnicode($text);
     }
 }
