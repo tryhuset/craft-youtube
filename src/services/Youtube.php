@@ -46,7 +46,7 @@ class Youtube extends Component
         return $description;
     }
 
-    public function get($post) : Film
+    public function get($post, $required = []) : Film
     {
         $prev = $post['prev'];
         unset($post['prev']);
@@ -65,11 +65,13 @@ class Youtube extends Component
 
         if (!array_key_exists('url', $post)) {
             $youtube = new Film();
+            $youtube->setRequired($required);
             $youtube->validate();
             return $youtube;
         }
 
         if (!empty($prev) && $prev == $post['url']) {
+
             if (array_key_exists('title', $post)) {
                 $post['title'] = $this->cleanTitle($post['title']);
             }
@@ -77,16 +79,16 @@ class Youtube extends Component
             if (array_key_exists('description', $post)) {
                 $post['description'] = $this->cleanDescription($post['description']);
             }
+
             $youtube = new Film($post);
-            $youtube->validate();
-            if (!$youtube->hasErrors()) {
-                return $youtube;
-            }
+            $youtube->setRequired($required);
+            return $youtube;
         }
 
         $code = $this->parseUrl($post['url']);
 
         $youtube = new Film($post);
+        $youtube->setRequired($required);
 
         if (strlen($code) !== 11) {
             $youtube->addError('url', Craft::t('craft-youtube', 'Invalid Youtube url.'));
@@ -95,9 +97,12 @@ class Youtube extends Component
 
         $youtube->code = $code;
         $apiKey = CraftYoutube::getInstance()->settings->googleApiKey;
+
         try {
+            $headers = ['Referer' => Craft::$app->request->hostName];
             $client = new Client([
                 'base_uri' => 'https://www.googleapis.com',
+                'headers' => $headers,
             ]);
             $response = $client->get("/youtube/v3/videos?key={$apiKey}&id={$code}&part=snippet,contentDetails");
 
@@ -107,6 +112,7 @@ class Youtube extends Component
             }
 
             $response = json_decode($response->getBody(), true);
+
             unset($post['code']);
             unset($post['thumbnails']);
             unset($post['duration']);
@@ -142,6 +148,7 @@ class Youtube extends Component
                         }
 
                         $data = array_merge($data, $post);
+
                         $youtube->setAttributes($data);
                         $youtube->validate();
                     } else {

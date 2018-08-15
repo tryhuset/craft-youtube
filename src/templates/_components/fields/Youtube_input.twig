@@ -46,7 +46,7 @@
         class: 'text'
     }) }}
     {% if value is not empty %}
-        <button id="{{ name }}-clear" type="button">{{ 'clear'|t }}</button>
+        <button id="{{ name }}-clear" type="button">{{ 'clear'|t('craft-youtube') }}</button>
     {% endif %}
 </div>
 
@@ -104,6 +104,24 @@
             type: 'hidden',
             class: 'hidden'
         }) }}
+    {% if not required.description %}
+        {{ forms.text({
+            id: name~'-description',
+            name: name~'[description]',
+            value: value.description|default(''),
+            type: 'hidden',
+            class: 'hidden'
+        }) }}
+    {% endif %}
+    {% if not required.title %}
+        {{ forms.text({
+            id: name~'-title',
+            name: name~'[title]',
+            value: value.title|default(''),
+            type: 'hidden',
+            class: 'hidden'
+        }) }}
+    {% endif %}
         <div style="margin-top: 10px;max-width: 480px;">
             <div style="position: relative;padding-bottom: 56.25%;">
                 <iframe
@@ -115,9 +133,10 @@
                     style="position: absolute;top: 0;left: 0;width: 100%;height: 100%;">
                 </iframe>
             </div>
+        {% if required.title %}
             <div class="field">
                 <div class="heading">
-                    <label id="fields-youtube-title-label" for="fields-youtube-title">{{ 'Title'|t }}</label>
+                    <label id="fields-youtube-title-label" for="fields-youtube-title">{{ 'Title'|t('craft-youtube') }}</label>
                 </div>
                 <div class="input ltr {% if value.hasErrors('title') %}errors{% endif %}">
                     {{ forms.text({
@@ -135,9 +154,11 @@
                     </ul>
                 {% endif %}
             </div>
+        {% endif %}
+        {% if required.description %}
             <div class="field">
                 <div class="heading">
-                    <label id="fields-youtube-description-label" for="fields-youtube-description">{{ 'Description'|t }}</label>
+                    <label id="fields-youtube-description-label" for="fields-youtube-description">{{ 'Description'|t('craft-youtube') }}</label>
                 </div>
                 <div class="input ltr {% if value.hasErrors('description') %}errors{% endif %}">
                     {{ forms.textarea({
@@ -155,10 +176,11 @@
                     </ul>
                 {% endif %}
             </div>
+        {% endif %}
         {% if value.duration %}
             <div class="field">
                 <div class="heading">
-                    <label>{{ 'Duration'|t }}</label>
+                    <label>{{ 'Duration'|t('craft-youtube') }}</label>
                 </div>
                 <div class="input ltr {% if value.hasErrors('duration') %}errors{% endif %}">
                     {{ value.duration|youtube_duration }}

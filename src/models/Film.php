@@ -22,6 +22,11 @@ use craft\base\Model;
  */
 class Film extends Model
 {
+    private $required = [
+        'title' => true,
+        'description' => true,
+    ];
+
     // Public Properties
     // =========================================================================
 
@@ -70,16 +75,32 @@ class Film extends Model
         }
     }
 
+    public function setRequired($fields)
+    {
+        $this->required = array_merge($this->required, $fields);
+    }
+
     /**
      * @inheritdoc
      */
     public function rules()
     {
-        return [
+        $rules = [
             [['title', 'url', 'title', 'duration'], 'string'],
-            [['title', 'code', 'description'], 'required'],
+            ['code', 'required'],
             ['code', 'string', 'min' => 11, 'max' => 11],
             ['thumbnails', 'validateArray'],
         ];
+        if ($this->required['title']) {
+            $rules = array_merge($rules, [
+                ['title', 'required', 'message' => Craft::t('craft-youtube', 'Title cannot be blank.')],
+            ]);
+        }
+        if ($this->required['description']) {
+            $rules = array_merge($rules, [
+                ['description', 'required', 'message' => Craft::t('craft-youtube', 'Description cannot be blank.')],
+            ]);
+        }
+        return $rules;
     }
 }

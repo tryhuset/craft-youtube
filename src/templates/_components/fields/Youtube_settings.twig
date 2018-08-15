@@ -1,0 +1,34 @@
+{# @var craft \craft\web\twig\variables\CraftVariable #}
+{#
+/**
+ * Youtube plugin for Craft CMS
+ *
+ * Youtube Field Settings
+ *
+ * @author    Thomas Sømoen
+ * @copyright Copyright (c) 2018 Thomas Sømoen
+ * @link      https://apt.no/
+ * @package   Youtube
+ * @since     1.0.0
+ */
+#}
+
+{% import "_includes/forms" as forms %}
+
+{{ forms.checkboxField({
+    label: 'Use title'|t('craft-youtube'),
+    id: 'title',
+    name: 'title',
+    value: true,
+    checked: field['title'],
+    instructions: 'Check if you will use title'|t('craft-youtube')
+})}}
+
+{{ forms.checkboxField({
+    label: 'Use description'|t('craft-youtube'),
+    id: 'description',
+    name: 'description',
+    value: true,
+    checked: field['description'],
+    instructions: 'Check if you will use description'|t('craft-youtube')
+})}}

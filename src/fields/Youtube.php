@@ -40,6 +40,15 @@ class Youtube extends Field
     // Public Properties
     // =========================================================================
 
+    /**
+     * @var boolean
+     */
+    public $title = true;
+
+    /**
+     * @var boolean
+     */
+    public $description = true;
 
     // Static Methods
     // =========================================================================
@@ -54,6 +63,17 @@ class Youtube extends Field
 
     // Public Methods
     // =========================================================================
+
+    public function __construct($config = [])
+    {
+        if (isset($config['title'])) {
+            $config['title'] = (bool) $config['title'];
+        }
+        if (isset($config['description'])) {
+            $config['description'] = (bool) $config['description'];
+        }
+        parent::__construct($config);
+    }
 
     /**
      * @inheritdoc
@@ -70,17 +90,28 @@ class Youtube extends Field
     {
 
         $model = new Film();
+        $model->setRequired([
+            'title' => $this->title,
+            'description' => $this->description,
+        ]);
+
         if (empty($value)) {
             return $model;
         }
 
         if (is_array($value)) {
             if ($value['url'] === $value['prev']) {
-                $model = CraftYoutube::getInstance()->youtube->get($value);
+                $model = CraftYoutube::getInstance()->youtube->get($value, [
+                    'title' => $this->title,
+                    'description' => $this->description,
+                ]);
             } else {
                 $model = CraftYoutube::getInstance()->youtube->get([
                     'prev' => $this->prev,
                     'url' => $value['url'],
+                ], [
+                    'title' => $this->title,
+                    'description' => $this->description,
                 ]);
             }
             $this->prev = $value['url'];
@@ -90,8 +121,23 @@ class Youtube extends Field
             $model = new Film($json);
             $this->prev = $json['url'];
         }
-
+        $model->setRequired([
+            'title' => $this->title,
+            'description' => $this->description,
+        ]);
         return $model;
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function rules()
+    {
+        return [
+            ['title', 'boolean'],
+            ['description', 'boolean'],
+            [['title', 'description'], 'default', 'value' => false]
+        ];
     }
 
     public function getElementValidationRules(): array
@@ -124,6 +170,20 @@ class Youtube extends Field
     /**
      * @inheritdoc
      */
+    public function getSettingsHtml()
+    {
+        // Render the settings template
+        return Craft::$app->getView()->renderTemplate(
+            'craft-youtube/_components/fields/Youtube_settings',
+            [
+                'field' => $this,
+            ]
+        );
+    }
+
+    /**
+     * @inheritdoc
+     */
     public function getInputHtml($value, ElementInterface $element = null): string
     {
 
@@ -142,6 +202,10 @@ class Youtube extends Field
                 'field' => $this,
                 'id' => $id,
                 'namespacedId' => $namespacedId,
+                'required' => [
+                    'title' => $this->title,
+                    'description' => $this->description,
+                ],
             ]
         );
     }

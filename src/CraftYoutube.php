@@ -51,7 +51,7 @@ class CraftYoutube extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.3';
+    public $schemaVersion = '1.0.4';
 
     // Public Methods
     // =========================================================================
