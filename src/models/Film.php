@@ -48,7 +48,7 @@ class Film extends Model
     /**
      * @var string
      */
-    public $title = 'Youtube film';
+    public $title = '';
 
     /**
      * @var string
@@ -87,7 +87,6 @@ class Film extends Model
     {
         $rules = [
             [['title', 'url', 'title', 'duration'], 'string'],
-            ['code', 'required'],
             ['code', 'string', 'min' => 11, 'max' => 11],
             ['thumbnails', 'validateArray'],
         ];

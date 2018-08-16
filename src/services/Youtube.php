@@ -46,7 +46,7 @@ class Youtube extends Component
         return $description;
     }
 
-    public function get($post, $required = []) : Film
+    public function get($post, $required = [])
     {
         $prev = $post['prev'];
         unset($post['prev']);
@@ -68,6 +68,10 @@ class Youtube extends Component
             $youtube->setRequired($required);
             $youtube->validate();
             return $youtube;
+        }
+
+        if (array_key_exists('url', $post) && empty($post['url'])) {
+            return null;
         }
 
         if (!empty($prev) && $prev == $post['url']) {

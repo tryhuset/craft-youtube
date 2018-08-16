@@ -88,7 +88,6 @@ class Youtube extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-
         $model = new Film();
         $model->setRequired([
             'title' => $this->title,
@@ -100,6 +99,9 @@ class Youtube extends Field
         }
 
         if (is_array($value)) {
+            if (empty($value['url'])) {
+                return null;
+            }
             if ($value['url'] === $value['prev']) {
                 $model = CraftYoutube::getInstance()->youtube->get($value, [
                     'title' => $this->title,

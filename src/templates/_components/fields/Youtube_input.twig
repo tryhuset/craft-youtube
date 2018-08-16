@@ -45,13 +45,12 @@
         value: value.url|default(''),
         class: 'text'
     }) }}
-    {% if value is not empty %}
+    {% if value.url|default(false) %}
         <button id="{{ name }}-clear" type="button">{{ 'clear'|t('craft-youtube') }}</button>
     {% endif %}
 </div>
 
-
-{% if value is not empty %}
+{% if value.code|default(false) %}
 <div id="youtube-content">
     {% if value.hasErrors('url') %}
         <ul class="errors">
