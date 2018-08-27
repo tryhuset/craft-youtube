@@ -2,7 +2,7 @@
     "name": "apt/craft-youtube",
     "description": "Add youtube field",
     "type": "craft-plugin",
-    "version": "1.0.5",
+    "version": "1.0.6",
     "keywords": [
         "craft",
         "cms",
@@ -18,7 +18,7 @@
         }
     ],
     "require": {
-        "craftcms/cms": "^3.0.0-RC1",
+        "craftcms/cms": "3.0.*",
         "elvanto/litemoji": "^1.4"
     },
     "autoload": {
