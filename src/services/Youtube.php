@@ -195,11 +195,6 @@ class Youtube extends Component
             return self::cleanIt(end($parts));
         }
 
-        // type: youtu.be/mr9PjLNsUgU
-        if (strpos($param, '.be/')===0) {
-            $parts = explode("/", $param);
-            return self::cleanIt(end($parts));
-        }
         // type: youtube.com/embed/mr9PjLNsUgU;
         if (strpos($param, 'youtube.com/embed/')===0) {
             $parts = explode("/", $param);
