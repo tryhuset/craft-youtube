@@ -50,7 +50,6 @@
     {% endif %}
 </div>
 
-{% if value.code|default(false) %}
 <div id="youtube-content">
     {% if value.hasErrors('url') %}
         <ul class="errors">
@@ -209,4 +208,3 @@
         });
     })();
 </script>
-{% endif %}
