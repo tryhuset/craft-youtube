@@ -2,7 +2,7 @@
     "name": "apt/craft-youtube",
     "description": "Add youtube field",
     "type": "craft-plugin",
-    "version": "1.0.7",
+    "version": "1.0.8",
     "keywords": [
         "craft",
         "cms",
@@ -31,7 +31,7 @@
         "handle": "craft-youtube",
         "hasCpSettings": true,
         "hasCpSection": false,
-        "changelogUrl": "???",
+        "changelogUrl": "https://git1.apt.no/open/craft-youtube/blob/master/CHANGELOG.md",
         "components": {
             "youtube": "apt\\craftyoutube\\services\\Youtube"
         },
