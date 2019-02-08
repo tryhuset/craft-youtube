@@ -179,14 +179,6 @@ class Youtube extends Component
             return self::cleanIt($param);
         }
 
-        // 'vanlig' youtube-url
-        if (filter_var($param, FILTER_VALIDATE_URL)) {
-            parse_str( parse_url( $param, PHP_URL_QUERY ), $vars );
-            if(isset($vars['v']) && strlen($vars['v']) == 11) {
-                return self::cleanIt($vars['v']);
-            }
-        }
-
         $param = str_replace(['http://','https://', 'www.', '//'], '', $param);
 
         // type: youtu.be/mr9PjLNsUgU
@@ -201,7 +193,7 @@ class Youtube extends Component
             return self::cleanIt(end($parts));
         }
 
-        // type: youtube.com/watch?v=mr9PjLNsUgU&feature=youtu.be
+        // normal youtube url: youtube.com/watch?v=mr9PjLNsUgU
         if (strpos($param, 'youtube.com/')===0) {
             parse_str( parse_url( $param, PHP_URL_QUERY ), $vars );
             if(isset($vars['v']) && strlen($vars['v']) == 11) {
