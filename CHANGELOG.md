@@ -4,6 +4,10 @@ All notable changes to this project will be documented in this file.
 
 The format is based on [Keep a Changelog](http://keepachangelog.com/) and this project adheres to [Semantic Versioning](http://semver.org/).
 
+## 1.0.9 - 2019-02-11
+### Fixed
+- Fixed a bug that occurred when restoring a previous version of an entry with a YouTube field.
+
 ## 1.0.8 - 2019-02-08
 ### Added
 - Support embed urls, e.g. https://www.youtube.com/embed/mr9PjLNsUgU
