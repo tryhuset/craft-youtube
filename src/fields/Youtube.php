@@ -100,7 +100,7 @@ class Youtube extends Field
 
         if (is_array($value)) {
             if (empty($value['url'])) {
-                return null;
+                return $model;
             }
             if (isset($value['prev']) && $value['url'] === $value['prev']) {
                 $model = CraftYoutube::getInstance()->youtube->get($value, [
