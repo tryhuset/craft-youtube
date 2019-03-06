@@ -182,26 +182,10 @@ class Youtube extends Component
             return self::cleanIt($param);
         }
 
-        $param = str_replace(['http://','https://', 'www.', '//'], '', $param);
-
-        // type: youtu.be/mr9PjLNsUgU
-        if (strpos($param, 'youtu.be/')===0) {
-            $parts = explode("/", $param);
-            return self::cleanIt(end($parts));
-        }
-
-        // type: youtube.com/embed/mr9PjLNsUgU
-        if (strpos($param, 'youtube.com/embed/')===0) {
-            $parts = explode("/", $param);
-            return self::cleanIt(end($parts));
-        }
-
-        // normal youtube url: youtube.com/watch?v=mr9PjLNsUgU
-        if (strpos($param, 'youtube.com/')===0) {
-            parse_str( parse_url( $param, PHP_URL_QUERY ), $vars );
-            if(isset($vars['v']) && strlen($vars['v']) == 11) {
-                return self::cleanIt($vars['v']);
-            }
+        // https://gist.github.com/TrevorJTClarke/a14c37db3c11ee23a700
+        $pattern = '/^(?:https?:\/\/)?(?:i\.|www\.|img\.)?(?:youtu\.be\/|youtube\.com\/|ytimg\.com\/)(?:embed\/|v\/|vi\/|vi_webp\/|watch\?v=|watch\?.+&v=)((\w|-){11})(?:\S+)?$/i';
+        if (preg_match($pattern, $param, $match)) {
+            return self::cleanIt($match[1]);
         }
 
         return null;
