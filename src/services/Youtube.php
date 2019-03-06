@@ -70,8 +70,11 @@ class Youtube extends Component
             return $youtube;
         }
 
-        if (array_key_exists('url', $post) && empty($post['url'])) {
-            return null;
+        if (array_key_exists('url', $post) && empty($post['url']) && !empty($post['code'])) {
+            $youtube = new Film();
+            $youtube->setRequired($required);
+            $youtube->validate();
+            return $youtube;
         }
 
         if (!empty($prev) && $prev == $post['url']) {
