@@ -103,7 +103,7 @@ class Youtube extends Component
         }
 
         $youtube->code = $code;
-        $apiKey = CraftYoutube::getInstance()->settings->googleApiKey;
+        $apiKey = CraftYoutube::getInstance()->settings->getApiKey();
 
         try {
             $headers = ['Referer' => Craft::$app->request->hostName];

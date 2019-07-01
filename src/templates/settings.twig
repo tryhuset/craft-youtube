@@ -17,11 +17,13 @@
 
 {% do view.registerAssetBundle("apt\\craftyoutube\\assetbundles\\craftyoutube\\CraftYoutubeAsset") %}
 
-{{ forms.textField({
+{{ forms.autosuggestField({
     label: 'Google Api Key'|t('craft-youtube'),
     id: 'googleApiKey',
     name: 'googleApiKey',
-    value: settings['googleApiKey']})
-}}
+    value: settings['googleApiKey'],
+    suggestEnvVars: true,
+    suggestAliases: true
+})}}
 
 <a href="https://developers.google.com/maps/documentation/javascript/get-api-key" target="_blank" rel="nofollow noreferrer">{{ 'Get api key by following this documentation.'|t('craft-youtube') }}</a>

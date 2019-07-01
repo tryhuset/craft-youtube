@@ -33,6 +33,11 @@ class Settings extends Model
     // Public Methods
     // =========================================================================
 
+    public function getApiKey()
+    {
+        return Craft::parseEnv($this->googleApiKey);
+    }
+
     /**
      * @inheritdoc
      */

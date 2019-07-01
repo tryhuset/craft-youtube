@@ -1,40 +1,40 @@
 {
-    "name": "apt/craft-youtube",
-    "description": "Add youtube field",
-    "type": "craft-plugin",
-    "version": "1.0.13",
-    "keywords": [
-        "craft",
-        "cms",
-        "craftcms",
-        "craft-plugin",
-        "craft youtube"
-    ],
-    "license": "MIT",
-    "authors": [
-        {
-            "name": "Thomas Sømoen",
-            "homepage": "https://apt.no/"
-        }
-    ],
-    "require": {
-        "craftcms/cms": "3.*",
-        "elvanto/litemoji": "^1.4"
-    },
-    "autoload": {
-        "psr-4": {
-          "apt\\craftyoutube\\": "src/"
-        }
-    },
-    "extra": {
-        "name": "Craft Youtube",
-        "handle": "craft-youtube",
-        "hasCpSettings": true,
-        "hasCpSection": false,
-        "changelogUrl": "https://git1.apt.no/open/craft-youtube/blob/master/CHANGELOG.md",
-        "components": {
-            "youtube": "apt\\craftyoutube\\services\\Youtube"
-        },
-        "class": "apt\\craftyoutube\\CraftYoutube"
+  "name": "apt/craft-youtube",
+  "description": "Add youtube field",
+  "type": "craft-plugin",
+  "version": "1.0.14",
+  "keywords": [
+    "craft",
+    "cms",
+    "craftcms",
+    "craft-plugin",
+    "craft youtube"
+  ],
+  "license": "MIT",
+  "authors": [
+    {
+      "name": "Thomas Sømoen",
+      "homepage": "https://apt.no/"
     }
+  ],
+  "require": {
+    "craftcms/cms": "3.*",
+    "elvanto/litemoji": "^1.4"
+  },
+  "autoload": {
+    "psr-4": {
+      "apt\\craftyoutube\\": "src/"
+    }
+  },
+  "extra": {
+    "name": "Craft Youtube",
+    "handle": "craft-youtube",
+    "hasCpSettings": true,
+    "hasCpSection": false,
+    "changelogUrl": "https://git1.apt.no/open/craft-youtube/blob/master/CHANGELOG.md",
+    "components": {
+      "youtube": "apt\\craftyoutube\\services\\Youtube"
+    },
+    "class": "apt\\craftyoutube\\CraftYoutube"
+  }
 }
