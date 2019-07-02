@@ -13,6 +13,7 @@ namespace apt\craftyoutube\services;
 use apt\craftyoutube\CraftYoutube;
 use apt\craftyoutube\models\Film;
 use GuzzleHttp\Client;
+use GuzzleHttp\Exception\ClientException;
 
 use Craft;
 use craft\base\Component;
@@ -163,8 +164,36 @@ class Youtube extends Component
                     }
                 }
             }
+        } catch(ClientException $e) {
+            $message = 'An error occurred fetching the youtube movie';
+            if (Craft::$app->user->isAdmin) {
+                $messageAttributes = [
+                    'apiKey' => $apiKey,
+                ];
+                try {
+                    $response = $e->getResponse();
+                    $response = json_decode($response->getBody(), true);
+                    if ($response && isset($response['error']) && isset($response['error']['errors'])) {
+                        $error = null;
+                        if (is_array($response['error']['errors'])) {
+                            $error = array_shift($response['error']['errors']);
+                            $message = 'Youtube error';
+                            $messageAttributes = array_merge($messageAttributes, $error);
+                        }
+                    }
+                } catch (\Exception $e) {
+                    $message = $e->getMessage();
+                }
+                $youtube->addError('url', Craft::t('craft-youtube', $message, $messageAttributes));
+            } else {
+                $youtube->addError('url', Craft::t('craft-youtube', $message));
+            }
         } catch (\Exception $e) {
-            $youtube->addError('url', Craft::t('craft-youtube', 'An error occurred fetching the youtube movie'));
+            if (Craft::$app->user->isAdmin) {
+                $youtube->addError('url', Craft::t('craft-youtube', $e->getMessage()));
+            } else {
+                $youtube->addError('url', Craft::t('craft-youtube', 'An error occurred fetching the youtube movie'));
+            }
         }
 
         return $youtube;

@@ -27,4 +27,5 @@ return [
     'An error occurred fetching the youtube movie' => 'Det oppstod en feil da vi skulle hente videoen hos Youtube',
     'Youtube movie "{code}" doesn\'t exist' => 'Youtube film med kode {code} finnes ikke',
     '{attribute} must be an array' => '{attribute} må være en liste',
+    'Youtube error' => '{message}: {reason} «{apiKey}»',
 ];

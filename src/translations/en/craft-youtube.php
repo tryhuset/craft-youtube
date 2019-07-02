@@ -16,4 +16,5 @@
 return [
     'Craft Youtube plugin loaded' => 'Craft Youtube plugin loaded',
     'Url is not a valid URL.' => 'Invalid Youtube url.',
+    'Youtube error' => '{message}: {reason} «{apiKey}»',
 ];
