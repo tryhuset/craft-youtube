@@ -88,6 +88,12 @@ class Youtube extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
+        if ($value instanceOf Film) {
+            $value->title =  $this->title;
+            $value->description = $this->description;
+            return $value;
+        }
+
         $model = new Film();
         $model->setRequired([
             'title' => $this->title,
