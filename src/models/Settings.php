@@ -26,12 +26,23 @@ class Settings extends Model
     // =========================================================================
 
     /**
+     * @var bool
+     */
+    public $useApi = true;
+
+    /**
      * @var string
      */
     public $googleApiKey = '';
 
     // Public Methods
     // =========================================================================
+
+    public function getUseApi(): bool
+    {
+        $value = Craft::parseEnv($this->useApi);
+        return boolval($value);
+    }
 
     public function getApiKey()
     {
@@ -43,6 +54,15 @@ class Settings extends Model
      */
     public function rules()
     {
+        if ($this->useApi) {
+            return [
+                ['useApi', 'boolean'],
+                ['googleApiKey', 'string'],
+                ['googleApiKey', 'required'],
+                ['googleApiKey', 'default', 'value' => ''],
+                ['useApi', 'default', 'value' => false],
+            ];
+        }
         return [
             ['googleApiKey', 'string'],
             ['googleApiKey', 'default', 'value' => ''],

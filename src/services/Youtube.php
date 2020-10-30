@@ -104,6 +104,13 @@ class Youtube extends Component
         }
 
         $youtube->code = $code;
+
+        $useApi = CraftYoutube::getInstance()->settings->getUseApi();
+
+        if (!$useApi) {
+            return $youtube;
+        }
+
         $apiKey = CraftYoutube::getInstance()->settings->getApiKey();
 
         try {
