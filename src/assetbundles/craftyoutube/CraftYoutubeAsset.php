@@ -8,7 +8,7 @@
  * @copyright Copyright (c) 2018 Thomas Sømoen
  */
 
-namespace apt\craftyoutube\assetbundles\CraftYoutube;
+namespace apt\craftyoutube\assetbundles\craftyoutube;
 
 use Craft;
 use craft\web\AssetBundle;
