@@ -19,7 +19,7 @@ use Craft;
  * @package   CraftYoutube
  * @since     1.0.0
  */
-class CraftYoutubeTwigExtension extends \Twig_Extension
+class CraftYoutubeTwigExtension extends \Twig\Extension\AbstractExtension
 {
     // Public Methods
     // =========================================================================
@@ -38,10 +38,10 @@ class CraftYoutubeTwigExtension extends \Twig_Extension
     public function getFilters()
     {
         return [
-            new \Twig_SimpleFilter('youtube_duration', [$this, 'formatDuration']),
-            new \Twig_SimpleFilter('emoji_shortcode', [$this, 'emojiShortcode']),
-            new \Twig_SimpleFilter('emoji_html', [$this, 'emojiHTML']),
-            new \Twig_SimpleFilter('emoji_unicode', [$this, 'emojiUnicode']),
+            new \Twig\TwigFilter('youtube_duration', [$this, 'formatDuration']),
+            new \Twig\TwigFilter('emoji_shortcode', [$this, 'emojiShortcode']),
+            new \Twig\TwigFilter('emoji_html', [$this, 'emojiHTML']),
+            new \Twig\TwigFilter('emoji_unicode', [$this, 'emojiUnicode']),
         ];
     }
 

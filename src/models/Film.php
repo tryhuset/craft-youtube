@@ -86,17 +86,19 @@ class Film extends Model
     public function rules()
     {
         $rules = [
-            [['title', 'url', 'title', 'duration'], 'string'],
+            [['url', 'duration'], 'string'],
             ['code', 'string', 'min' => 11, 'max' => 11],
             ['thumbnails', 'validateArray'],
         ];
         if ($this->required['title']) {
             $rules = array_merge($rules, [
+                ['title', 'string'],
                 ['title', 'required', 'message' => Craft::t('craft-youtube', 'Title cannot be blank.')],
             ]);
         }
         if ($this->required['description']) {
             $rules = array_merge($rules, [
+                ['description', 'string'],
                 ['description', 'required', 'message' => Craft::t('craft-youtube', 'Description cannot be blank.')],
             ]);
         }
