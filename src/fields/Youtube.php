@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Craft Youtube plugin for Craft CMS 3.x
  *
@@ -30,11 +31,6 @@ class Youtube extends Field
 {
     // Private Properties
     // =========================================================================
-
-    /**
-     * @var string
-     */
-    private $prev = '';
 
 
     // Public Properties
@@ -88,9 +84,12 @@ class Youtube extends Field
      */
     public function normalizeValue($value, ElementInterface $element = null)
     {
-        if ($value instanceOf Film) {
-            $value->title =  $this->title;
-            $value->description = $this->description;
+        if ($value instanceof Film) {
+            $value->setRequired([
+                'title' => $this->title,
+                'description' => $this->description,
+            ]);
+
             return $value;
         }
 
@@ -108,26 +107,28 @@ class Youtube extends Field
             if (empty($value['url'])) {
                 return $model;
             }
+
+            // If url hasn't changed, only update text fields.
             if (isset($value['prev']) && $value['url'] === $value['prev']) {
                 $model = CraftYoutube::getInstance()->youtube->get($value, [
                     'title' => $this->title,
                     'description' => $this->description,
                 ]);
+
+            // IF url has changed, look up new video
             } else {
                 $model = CraftYoutube::getInstance()->youtube->get([
-                    'prev' => $this->prev,
+                    'prev' => $value['prev'],
                     'url' => $value['url'],
                 ], [
                     'title' => $this->title,
                     'description' => $this->description,
                 ]);
             }
-            $this->prev = $value['url'];
         } else {
             $json = json_decode($value, true);
             unset($json['__model__']);
             $model = new Film($json);
-            $this->prev = $json['url'];
         }
         $model->setRequired([
             'title' => $this->title,
@@ -199,12 +200,10 @@ class Youtube extends Field
         $id = Craft::$app->getView()->formatInputId($this->handle);
         $namespacedId = Craft::$app->getView()->namespaceInputId($id);
 
-
         // Render the input template
         return Craft::$app->getView()->renderTemplate(
             'craft-youtube/_components/fields/Youtube_input',
             [
-                'prev' => $this->prev,
                 'name' => $this->handle,
                 'value' => $value,
                 'field' => $this,

@@ -79,15 +79,6 @@ class Youtube extends Component
         }
 
         if (!empty($prev) && $prev == $post['url'] && !empty($post['code'])) {
-
-            if (array_key_exists('title', $post)) {
-                $post['title'] = $this->cleanTitle($post['title']);
-            }
-
-            if (array_key_exists('description', $post)) {
-                $post['description'] = $this->cleanDescription($post['description']);
-            }
-
             $youtube = new Film($post);
             $youtube->setRequired($required);
             return $youtube;
