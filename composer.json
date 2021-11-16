@@ -2,7 +2,7 @@
   "name": "apt/craft-youtube",
   "description": "Add youtube field",
   "type": "craft-plugin",
-  "version": "1.0.22",
+  "version": "1.0.23",
   "keywords": [
     "craft",
     "cms",

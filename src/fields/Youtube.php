@@ -118,8 +118,8 @@ class Youtube extends Field
             // IF url has changed, look up new video
             } else {
                 $model = CraftYoutube::getInstance()->youtube->get([
-                    'prev' => $value['prev'],
-                    'url' => $value['url'],
+                    'prev' => $value['prev'] ?? '',
+                    'url' => $value['url'] ?? '',
                 ], [
                     'title' => $this->title,
                     'description' => $this->description,
