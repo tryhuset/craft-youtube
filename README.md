@@ -1,4 +1,4 @@
-# Craft Youtube plugin for Craft CMS 3.x
+# Craft Youtube plugin for Craft CMS 4.x
 
 Add youtube field
 
@@ -6,7 +6,7 @@ Add youtube field
 
 ## Requirements
 
-This plugin requires Craft CMS 3.0.0-beta.23 or later.
+This plugin requires Craft CMS 4.0 or later.
 
 ## Installation
 

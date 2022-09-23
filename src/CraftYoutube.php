@@ -51,7 +51,7 @@ class CraftYoutube extends Plugin
     /**
      * @var string
      */
-    public $schemaVersion = '1.0.5';
+    public string $schemaVersion = '1.0.5';
 
     // Public Methods
     // =========================================================================
@@ -111,7 +111,7 @@ class CraftYoutube extends Plugin
     /**
      * @inheritdoc
      */
-    protected function createSettingsModel()
+    protected function createSettingsModel(): ?Settings
     {
         return new Settings();
     }

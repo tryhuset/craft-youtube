@@ -83,7 +83,7 @@ class Film extends Model
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules() : array
     {
         $rules = [
             [['url', 'duration'], 'string'],

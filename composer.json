@@ -2,7 +2,7 @@
   "name": "apt/craft-youtube",
   "description": "Add youtube field",
   "type": "craft-plugin",
-  "version": "1.0.23",
+  "version": "2.0.0",
   "keywords": [
     "craft",
     "cms",
@@ -18,7 +18,7 @@
     }
   ],
   "require": {
-    "craftcms/cms": "3.*"
+    "craftcms/cms": "^4.0"
   },
   "autoload": {
     "psr-4": {
@@ -35,5 +35,10 @@
       "youtube": "apt\\craftyoutube\\services\\Youtube"
     },
     "class": "apt\\craftyoutube\\CraftYoutube"
+  },
+  "config": {
+    "platform": {
+      "php": "8.0.2"
+    }
   }
 }

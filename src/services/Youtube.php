@@ -209,8 +209,8 @@ class Youtube extends Component
             return self::cleanIt($param);
         }
 
-        // https://gist.github.com/TrevorJTClarke/a14c37db3c11ee23a700
-        $pattern = '/^(?:https?:\/\/)?(?:i\.|www\.|img\.)?(?:youtu\.be\/|youtube\.com\/|ytimg\.com\/)(?:embed\/|v\/|vi\/|vi_webp\/|watch\?v=|watch\?.+&v=)((\w|-){11})(?:\S+)?$/i';
+        $pattern = '/(?:http(?:s)?:\/\/)?(?:www\.)?(?:youtu\.be\/|youtube\.com\/(?:(?:watch)?\?(?:.*&)?v(?:i)?=|(?:embed|v|vi|user)\/))([^\?&\"\'<> #]+)/i';
+
         if (preg_match($pattern, $param, $match)) {
             return self::cleanIt($match[1]);
         }

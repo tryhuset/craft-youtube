@@ -14,6 +14,7 @@ use apt\craftyoutube\CraftYoutube;
 
 use Craft;
 use craft\base\Model;
+use craft\helpers\App;
 
 /**
  * @author    Thomas Sømoen
@@ -40,19 +41,19 @@ class Settings extends Model
 
     public function getUseApi(): bool
     {
-        $value = Craft::parseEnv($this->useApi);
+        $value = App::parseEnv($this->useApi);
         return boolval($value);
     }
 
     public function getApiKey()
     {
-        return Craft::parseEnv($this->googleApiKey);
+        return App::parseEnv($this->googleApiKey);
     }
 
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules() : array
     {
         if ($this->useApi) {
             return [

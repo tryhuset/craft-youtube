@@ -82,7 +82,7 @@ class Youtube extends Field
     /**
      * @inheritdoc
      */
-    public function normalizeValue($value, ElementInterface $element = null)
+    public function normalizeValue($value, ElementInterface $element = null): mixed
     {
         if ($value instanceof Film) {
             $value->setRequired([
@@ -115,7 +115,7 @@ class Youtube extends Field
                     'description' => $this->description,
                 ]);
 
-            // IF url has changed, look up new video
+                // IF url has changed, look up new video
             } else {
                 $model = CraftYoutube::getInstance()->youtube->get([
                     'prev' => $value['prev'] ?? '',
@@ -140,7 +140,7 @@ class Youtube extends Field
     /**
      * @inheritdoc
      */
-    public function rules()
+    public function rules(): array
     {
         return [
             ['title', 'boolean'],
@@ -179,7 +179,7 @@ class Youtube extends Field
     /**
      * @inheritdoc
      */
-    public function getSettingsHtml()
+    public function getSettingsHtml(): null|string
     {
         // Render the settings template
         return Craft::$app->getView()->renderTemplate(
