@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Craft Youtube plugin for Craft CMS 3.x
  *
@@ -26,7 +27,7 @@ use LitEmoji\LitEmoji;
  */
 class Youtube extends Component
 {
-    protected function cleanTitle($title) : string
+    protected function cleanTitle($title): string
     {
         $title = LitEmoji::encodeShortcode($title);
         $title = strip_tags($title);
@@ -39,7 +40,7 @@ class Youtube extends Component
         return $title;
     }
 
-    protected function cleanDescription($description) : string
+    protected function cleanDescription($description): string
     {
         $description = strip_tags($description);
         $description = LitEmoji::encodeShortcode($description);
@@ -61,7 +62,7 @@ class Youtube extends Component
         }
 
         if (array_key_exists('thumbnails', $post) && !empty($post['thumbnails'])) {
-            $post['thumbnails'] = json_decode($post['thumbnails'], true);
+            $post['thumbnails'] = is_array($post['thumbnails']) ? $post['thumbnails'] : json_decode($post['thumbnails'], true);
         }
 
         if (!array_key_exists('url', $post)) {
@@ -124,7 +125,7 @@ class Youtube extends Component
             unset($post['duration']);
 
             if ($response['pageInfo']['totalResults'] === 0) {
-                $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', [ 'code' => $code ]));
+                $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', ['code' => $code]));
                 $youtube->code = null;
             } else {
                 if (array_key_exists('items', $response)) {
@@ -158,11 +159,11 @@ class Youtube extends Component
                         $youtube->setAttributes($data);
                         $youtube->validate();
                     } else {
-                        $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', [ 'code' => $code ]));
+                        $youtube->addError('url', Craft::t('craft-youtube', 'Youtube movie "{code}" doesn\'t exist', ['code' => $code]));
                     }
                 }
             }
-        } catch(ClientException $e) {
+        } catch (ClientException $e) {
             $message = 'An error occurred fetching the youtube movie';
             if (Craft::$app->user->isAdmin) {
                 $messageAttributes = [
@@ -197,7 +198,7 @@ class Youtube extends Component
         return $youtube;
     }
 
-    public static function parseUrl($param='')
+    public static function parseUrl($param = '')
     {
         $param = trim($param);
         if (empty($param)) {
@@ -205,7 +206,7 @@ class Youtube extends Component
         }
 
         // ren videokode
-        if(strlen($param) == 11) {
+        if (strlen($param) == 11) {
             return self::cleanIt($param);
         }
 
@@ -218,7 +219,7 @@ class Youtube extends Component
         return null;
     }
 
-    private static function cleanIt($value=null)
+    private static function cleanIt($value = null)
     {
         return str_replace(["."], '', trim($value));
     }
@@ -226,25 +227,26 @@ class Youtube extends Component
     /*
      * @return STRING
      */
-     public function formatDuration($ISO8601)
-     {
-         try {
-             $interval = new \DateInterval($ISO8601);
-             $duration = str_pad($interval->i, 2, '0', STR_PAD_LEFT).':'.str_pad($interval->s, 2, '0', STR_PAD_LEFT);
-             if ($interval->h > 0) {
-                 $duration = str_pad($interval->h, 2, '0', STR_PAD_LEFT).':'.$duration;
-             }
-             if ($interval->d > 0) {
-                 $duration = str_pad($interval->d, 2, '0', STR_PAD_LEFT).':'.$duration;
-             }
-             if ($interval->m > 0) {
-                 $duration = str_pad($interval->m, 2, '0', STR_PAD_LEFT).':'.$duration;
-             }
-             if ($interval->y > 0) {
-                 $duration = str_pad($interval->y, 2, '0', STR_PAD_LEFT).':'.$duration;
-             }
-             return $duration;
-         } catch (\Exception $e) {}
-         return $ISO8601;
-     }
+    public function formatDuration($ISO8601)
+    {
+        try {
+            $interval = new \DateInterval($ISO8601);
+            $duration = str_pad($interval->i, 2, '0', STR_PAD_LEFT) . ':' . str_pad($interval->s, 2, '0', STR_PAD_LEFT);
+            if ($interval->h > 0) {
+                $duration = str_pad($interval->h, 2, '0', STR_PAD_LEFT) . ':' . $duration;
+            }
+            if ($interval->d > 0) {
+                $duration = str_pad($interval->d, 2, '0', STR_PAD_LEFT) . ':' . $duration;
+            }
+            if ($interval->m > 0) {
+                $duration = str_pad($interval->m, 2, '0', STR_PAD_LEFT) . ':' . $duration;
+            }
+            if ($interval->y > 0) {
+                $duration = str_pad($interval->y, 2, '0', STR_PAD_LEFT) . ':' . $duration;
+            }
+            return $duration;
+        } catch (\Exception $e) {
+        }
+        return $ISO8601;
+    }
 }
