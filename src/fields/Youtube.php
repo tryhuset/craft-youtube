@@ -155,7 +155,7 @@ class Youtube extends Field
     }
 
     /**
-     * Validates the YOutube data.
+     * Validates the YouTube data.
      *
      * @param ElementInterface $element
      */
@@ -215,5 +215,17 @@ class Youtube extends Field
                 ],
             ]
         );
+    }
+
+    /**
+     * @inheritdoc
+     */
+    public function isValueEmpty(mixed $value, ElementInterface $element): bool
+    {
+        if ($value instanceof Film) {
+            return $value->isEmpty();
+        }
+        // Default to yii\validators\Validator::isEmpty()'s behavior
+        return $value === null || $value === [] || $value === '';
     }
 }

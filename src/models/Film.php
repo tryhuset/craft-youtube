@@ -1,4 +1,5 @@
 <?php
+
 /**
  * Craft Youtube plugin for Craft CMS 3.x
  *
@@ -80,10 +81,15 @@ class Film extends Model
         $this->required = array_merge($this->required, $fields);
     }
 
+    public function isEmpty()
+    {
+        return empty($this->url);
+    }
+
     /**
      * @inheritdoc
      */
-    public function rules() : array
+    public function rules(): array
     {
         $rules = [
             [['url', 'duration'], 'string'],
