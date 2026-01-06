@@ -1,4 +1,4 @@
-# Craft Youtube plugin for Craft CMS 4.x
+# Craft Youtube plugin for Craft CMS 5.x
 
 Add youtube field
 
@@ -6,7 +6,7 @@ Add youtube field
 
 ## Requirements
 
-This plugin requires Craft CMS 4.0 or later.
+This plugin requires Craft CMS 5.0 or later.
 
 ## Installation
 
@@ -34,7 +34,6 @@ To install the plugin, follow these instructions.
 
 4.  In the Control Panel, go to Settings → Plugins and click the “Install” button for Craft Vimeo.
 
-
 ## Craft Youtube Overview
 
 -Insert text here-
@@ -51,6 +50,6 @@ To install the plugin, follow these instructions.
 
 Some things to do, and ideas for potential features:
 
-* Release it
+- Release it
 
 Brought to you by [Thomas Sømoen](https://apt.no/)
