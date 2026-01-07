@@ -23,7 +23,7 @@ To install the plugin, follow these instructions.
           ...
           {
             "type": "vcs",
-            "url": "https://git1.apt.no/open/craft-youtube.git"
+            "url": "https://github.com/tryhuset/craft-youtube"
           }
         ],
         ...
@@ -52,4 +52,4 @@ Some things to do, and ideas for potential features:
 
 - Release it
 
-Brought to you by [Thomas Sømoen](https://apt.no/)
+Brought to you by [Thomas Sømoen](https://try.no/)

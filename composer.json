@@ -14,7 +14,7 @@
   "authors": [
     {
       "name": "Thomas Sømoen",
-      "homepage": "https://apt.no/"
+      "homepage": "https://try.no/"
     }
   ],
   "require": {
@@ -30,7 +30,7 @@
     "handle": "craft-youtube",
     "hasCpSettings": true,
     "hasCpSection": false,
-    "changelogUrl": "https://git1.apt.no/open/craft-youtube/blob/master/CHANGELOG.md",
+    "changelogUrl": "https://github.com/tryhuset/craft-youtube/blob/main/CHANGELOG.md",
     "components": {
       "youtube": "apt\\craftyoutube\\services\\Youtube"
     },
